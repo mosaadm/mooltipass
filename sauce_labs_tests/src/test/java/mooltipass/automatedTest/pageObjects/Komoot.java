@@ -15,22 +15,22 @@ public class Komoot extends AbstractPage{
 	}
 
 	
-	@FindBy(xpath = "//a[text()='Anmelden']")
+	@FindBy(xpath = "//span[text()='Anmelden']")
 	private WebElement loginBtn;
 
-	@FindBy(xpath = "//input[@id='email']")
+	@FindBy(xpath = "//input[@type='email']")
 	private WebElement email;
 
 	@FindBy(xpath = "//input[@id='password']")
 	private WebElement password;
 
-	@FindBy(xpath = "//span[text()='Anmelden']")
+	@FindBy(xpath = "//button[@type='submit']")
 	private WebElement submitLogin;
 	
 	@FindBy(xpath = "//a[text()='Abmelden']")
 	private WebElement logoutBtn;
 	
-	@FindBy(className = "c-thumbnail__img")
+	@FindBy(xpath = "//span//div[@class='c-thumbnail__img']")
 	private WebElement user;
 	
 	public void goToLogin(){
@@ -43,6 +43,7 @@ public class Komoot extends AbstractPage{
 	}
 
 	public void enterPassword(String value){
+		waitUntilAppears(password);
 		password.sendKeys(value);
 	}
 	
@@ -62,10 +63,14 @@ public class Komoot extends AbstractPage{
 	}
 	
 	public void logout(){
+		waitUntilAppears(By.xpath("//a[contains(text(),'No, thanks.')]"));
+		driver.findElement(By.xpath("//a[contains(text(),'No, thanks.')]")).click();
 		Actions action = new Actions(driver);
-		action.moveToElement(user);
-		action.perform();
-		logoutBtn.click();
+		action.moveToElement(user).moveToElement(logoutBtn).click();
+	//	action.moveToElement(logoutBtn);
+		action.build().perform();
+//		waitUntilAppears(logoutBtn);
+//		logoutBtn.click();
 
 	}
 }
